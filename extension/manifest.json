@@ -1,0 +1,89 @@
+{
+  "manifest_version": 3,
+  "name": "Hackathon Logger",
+  "version": "1.0.0",
+  "description": "Automatically logs hackathon registrations to your Google Sheet.",
+  "permissions": [
+    "storage",
+    "alarms",
+    "activeTab"
+  ],
+  "host_permissions": [
+    "*://*.devpost.com/*",
+    "*://*.devfolio.co/*",
+    "*://*.unstop.com/*",
+    "*://*.hack2skill.com/*",
+    "*://*.dorahacks.io/*",
+    "*://*.mlh.io/*",
+    "https://script.google.com/*",
+    "https://script.googleusercontent.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.devpost.com/*",
+        "*://*.devfolio.co/*",
+        "*://*.unstop.com/*",
+        "*://*.hack2skill.com/*",
+        "*://*.dorahacks.io/*",
+        "*://*.mlh.io/*"
+      ],
+      "js": [
+        "injected.js"
+      ],
+      "world": "MAIN",
+      "run_at": "document_start",
+      "all_frames": false
+    },
+    {
+      "matches": [
+        "*://*.devpost.com/*",
+        "*://*.devfolio.co/*",
+        "*://*.unstop.com/*",
+        "*://*.hack2skill.com/*",
+        "*://*.dorahacks.io/*",
+        "*://*.mlh.io/*"
+      ],
+      "js": [
+        "config.js",
+        "utils/date-parser.js",
+        "utils/text-utils.js",
+        "adapters/devpost.js",
+        "adapters/devfolio.js",
+        "adapters/unstop.js",
+        "adapters/hack2skill.js",
+        "adapters/dorahacks.js",
+        "adapters/mlh.js",
+        "content.js"
+      ],
+      "css": [
+        "toast.css"
+      ],
+      "run_at": "document_idle",
+      "all_frames": false
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "injected.js"
+      ],
+      "matches": [
+        "*://*.devpost.com/*",
+        "*://*.devfolio.co/*",
+        "*://*.unstop.com/*",
+        "*://*.hack2skill.com/*",
+        "*://*.dorahacks.io/*",
+        "*://*.mlh.io/*"
+      ]
+    }
+  ],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Hackathon Logger"
+  },
+  "options_page": "options/options.html"
+}

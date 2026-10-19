@@ -1,0 +1,105 @@
+/* ==========================================================================
+   Hackathon Logger - Toast Notification Styles
+   ========================================================================== */
+
+/* Main Toast Container */
+.hackathon-logger-toast,
+.hl-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2147483647;
+  display: flex;
+  align-items: center;
+  min-width: 240px;
+  max-width: 380px;
+  box-sizing: border-box;
+  padding: 12px 20px;
+  background-color: rgba(30, 30, 30, 0.95);
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", Arial, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), 0 1px 3px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  pointer-events: auto;
+  user-select: none;
+  animation: hackathon-logger-slide-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 1, 1), transform 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Slide-in from bottom */
+@keyframes hackathon-logger-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Auto-hide / Slide-out state */
+.hackathon-logger-toast--hidden,
+.hl-toast-hidden {
+  opacity: 0 !important;
+  transform: translateY(20px) !important;
+  pointer-events: none !important;
+}
+
+/* Success Toast Modifier */
+.hackathon-logger-toast--success,
+.hl-toast-success {
+  border-left: 4px solid #10b981;
+}
+
+.hackathon-logger-toast--success::before,
+.hl-toast-success::before {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 11px;
+  border: solid #10b981;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  margin-right: 12px;
+  margin-bottom: 2px;
+  flex-shrink: 0;
+}
+
+/* Error Toast Modifier */
+.hackathon-logger-toast--error,
+.hl-toast-error {
+  border-left: 4px solid #ef4444;
+}
+
+.hackathon-logger-toast--error::before,
+.hl-toast-error::before {
+  content: "✕";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background-color: #ef4444;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+/* Optional structured child elements */
+.hackathon-logger-toast-message,
+.hl-toast-message {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  word-break: break-word;
+}

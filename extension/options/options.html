@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hackathon Logger - Settings & Monitor</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --card-border: #334155;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --info: #3b82f6;
+      --purple: #8b5cf6;
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      line-height: 1.5;
+      padding: 32px 24px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--card-border);
+      padding-bottom: 20px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #ffffff;
+    }
+
+    .header-badge {
+      font-size: 12px;
+      background: rgba(99, 102, 241, 0.2);
+      color: #818cf8;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      font-weight: 600;
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    input[type="password"] {
+      width: 100%;
+      padding: 10px 14px;
+      background-color: #0b1120;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      color: var(--text-main);
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="url"]:focus,
+    input[type="password"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.25);
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      user-select: none;
+      margin-top: 12px;
+    }
+
+    .checkbox-group input[type="checkbox"] {
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+      cursor: pointer;
+    }
+
+    .checkbox-group span {
+      font-size: 14px;
+      color: var(--text-main);
+    }
+
+    .btn-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background-color 0.15s, transform 0.05s;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background-color: var(--accent);
+      color: #ffffff;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background-color: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background-color: #334155;
+      color: #ffffff;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background-color: #475569;
+    }
+
+    .btn-sm {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .status-msg {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--success);
+      display: inline-block;
+      transition: opacity 0.3s;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .badge-added { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+    .badge-updated { background: rgba(59, 130, 246, 0.2); color: var(--info); }
+    .badge-duplicate { background: rgba(139, 92, 246, 0.2); color: var(--purple); }
+    .badge-queued { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+    .badge-error { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+    .badge-count { background: #334155; color: #f8fafc; font-size: 12px; margin-left: 8px; }
+
+    /* Tables */
+    .table-container {
+      overflow-x: auto;
+      margin-top: 14px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #172033;
+      color: var(--text-muted);
+      padding: 10px 14px;
+      font-weight: 600;
+      border-bottom: 1px solid var(--card-border);
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    td {
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.6);
+      color: var(--text-main);
+      vertical-align: middle;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .hackathon-link {
+      color: #818cf8;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .hackathon-link:hover {
+      text-decoration: underline;
+    }
+
+    .empty-state {
+      padding: 24px;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+      font-style: italic;
+    }
+
+    .retry-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 14px;
+      background: #131c2e;
+      border: 1px solid var(--card-border);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .retry-item-details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .retry-item-title {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .retry-item-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .retry-item-error {
+      font-size: 12px;
+      color: var(--danger);
+    }
+
+    .queue-header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .auto-refresh-note {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: normal;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>
+        <span>⚡ Hackathon Logger</span>
+        <span class="header-badge">Manifest V3</span>
+      </h1>
+      <span class="auto-refresh-note">Auto-refreshes every 10s</span>
+    </header>
+
+    <!-- SECTION 1: APPS SCRIPT CONFIGURATION -->
+    <div class="card">
+      <div class="card-title">Configuration</div>
+      
+      <div class="form-group">
+        <label for="appsScriptUrl">Google Apps Script Web App URL</label>
+        <input type="url" id="appsScriptUrl" placeholder="https://script.google.com/macros/s/AKfycb.../exec" spellcheck="false" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label for="appsScriptToken">Secret Authentication Token</label>
+        <input type="password" id="appsScriptToken" placeholder="Enter your secret token" spellcheck="false" autocomplete="off">
+      </div>
+
+      <div class="form-group">
+        <label class="checkbox-group">
+          <input type="checkbox" id="debugMode">
+          <span>Enable Debug Mode (verbose console logging)</span>
+        </label>
+      </div>
+
+      <div class="btn-group" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <button id="saveBtn" class="btn-primary">Save Settings</button>
+        <button id="testBtn" class="btn-secondary" type="button">Test Connection</button>
+        <span id="saveStatus" class="status-msg"></span>
+      </div>
+    </div>
+
+    <!-- SECTION 2: RETRY QUEUE STATUS -->
+    <div class="card">
+      <div class="card-title">
+        <div>
+          <span>Retry Queue</span>
+          <span id="queueBadge" class="badge badge-count">0 items</span>
+        </div>
+        <div class="queue-header-actions">
+          <button id="flushBtn" class="btn-secondary btn-sm">Flush Retry Queue</button>
+        </div>
+      </div>
+      <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 12px;">
+        Failed submissions are stored locally with exponential backoff and retried every 5 minutes.
+      </p>
+      <div id="queueList">
+        <div class="empty-state">Queue is currently empty.</div>
+      </div>
+    </div>
+
+    <!-- SECTION 3: RECENT ACTIVITY LOG -->
+    <div class="card">
+      <div class="card-title">
+        <span>Recent Activity (Last 20)</span>
+        <button id="refreshBtn" class="btn-secondary btn-sm">Refresh Now</button>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 140px;">Time</th>
+              <th>Hackathon</th>
+              <th style="width: 100px;">Status</th>
+              <th style="width: 60px;">Row</th>
+              <th>Error / Message</th>
+            </tr>
+          </thead>
+          <tbody id="logTableBody">
+            <tr>
+              <td colspan="5" class="empty-state">No activity logged yet.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
